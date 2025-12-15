@@ -9,58 +9,75 @@ const messages = [
   "Awaiting Command Input"
 ];
 
-const microLines = [
+// Micro-log lines that feel like file operations (keeps it “alive”)
+const microPool = [
   "OPENING: DOSSIER /CRUSADE/CA-41",
   "SCANNING: INDEX TABLES … OK",
   "SORTING: BATTLE LOGS BY DATE",
   "HASHING: OUTCOME RECORDS … OK",
   "LINKING: TERRITORY CONTROL TABLE",
-  "CACHING: MAP LAYERS … OK"
+  "CACHING: MAP LAYERS … OK",
+  "VALIDATING: ROSTER ENTRIES … OK",
+  "PARSING: AFTER-ACTION REPORTS",
+  "CHECKSUM: CAMPAIGN STATE … OK",
+  "ALLOCATING: DATA BUFFERS … OK",
+  "RESOLVING: WARP ROUTES … OK",
+  "LOCKING: ARCHIVE SEALS … OK"
 ];
 
 const statusEl = document.getElementById("statusSecondary");
-const microEl = document.getElementById("microLog");
-const indexEl = document.getElementById("indexCount");
+const microEl  = document.getElementById("microLog");
+const indexEl  = document.getElementById("indexCount");
 
-let msgIndex = 0;
-let tick = 1;
-
-// timings (tweakable)
+// Timings
 const HOLD_MS = 6500;
 const FADE_MS = 700;
 
-// micro-log “activity” loop
-function updateMicroLog() {
-  const a = microLines[(tick + 0) % microLines.length];
-  const b = microLines[(tick + 1) % microLines.length];
-  const c = microLines[(tick + 2) % microLines.length];
-  microEl.textContent = `${a}\n${b}\n${c}`;
+let msgIndex = 0;
+let counter = 1;
+
+// Micro-log: maintain a rolling window
+const logLines = [];
+const MAX_LINES = 6;
+
+function pushLogLine(line) {
+  logLines.push(line);
+  while (logLines.length > MAX_LINES) logLines.shift();
+  microEl.textContent = logLines.join("\n");
 }
 
-// index counter (slow, procedural)
-function updateIndex() {
-  const n = (tick % 9999).toString().padStart(4, "0");
-  indexEl.textContent = n;
+function nextMicroLine() {
+  const pick = microPool[Math.floor(Math.random() * microPool.length)];
+  const stamp = String(counter).padStart(4, "0");
+  return `${stamp} | ${pick}`;
 }
 
 function setMessage(next) {
   statusEl.style.opacity = "0";
-  window.setTimeout(() => {
+  setTimeout(() => {
     statusEl.textContent = next;
     statusEl.style.opacity = "1";
   }, FADE_MS);
 }
 
-// init
-updateMicroLog();
-updateIndex();
+// Prime log
+for (let i = 0; i < MAX_LINES; i++) {
+  pushLogLine(nextMicroLine());
+  counter++;
+}
 
-// rotate main messages
-window.setInterval(() => {
+indexEl.textContent = "0001";
+
+// Loop
+setInterval(() => {
   msgIndex = (msgIndex + 1) % messages.length;
   setMessage(messages[msgIndex]);
 
-  tick += 1;
-  updateMicroLog();
-  updateIndex();
+  // Add 1–2 new log lines per cycle to feel “busy”
+  pushLogLine(nextMicroLine()); counter++;
+  if (Math.random() > 0.55) { pushLogLine(nextMicroLine()); counter++; }
+
+  // Update index counter
+  const idx = (parseInt(indexEl.textContent, 10) + 1) % 9999;
+  indexEl.textContent = String(idx || 1).padStart(4, "0");
 }, HOLD_MS);
