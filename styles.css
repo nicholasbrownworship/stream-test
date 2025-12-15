@@ -14,6 +14,7 @@
 
 *{ box-sizing:border-box; }
 html,body{ height:100%; margin:0; }
+
 body{
   overflow:hidden;
   background:
@@ -22,7 +23,7 @@ body{
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* ========== FULL FRAME + MOTION LAYERS ========== */
+/* ====== FULL FRAME + MOTION LAYERS ====== */
 .frame{
   position:relative;
   width:100vw;
@@ -31,7 +32,7 @@ body{
   place-items:center;
 }
 
-/* drifting grain + subtle texture */
+/* drifting grain / texture */
 .frame::before{
   content:"";
   position:absolute;
@@ -54,7 +55,7 @@ body{
   pointer-events:none;
 }
 
-/* slow scan pass */
+/* slow scan pass (whole screen) */
 .frame::after{
   content:"";
   position:absolute;
@@ -72,15 +73,15 @@ body{
   pointer-events:none;
 }
 
-/* ========== PANEL ========== */
+/* ====== PANEL ====== */
 .panel{
   position:relative;
-  width:min(1100px, 92vw);
-  padding: 56px 52px 44px;
+  width:min(980px, 92vw);
+  padding: 52px 52px 42px;
   border-radius: 18px;
   border: 1px solid rgba(233,223,200,.10);
   background:
-    linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.18)),
+    linear-gradient(180deg, rgba(0,0,0,.44), rgba(0,0,0,.16)),
     radial-gradient(900px 420px at 50% 35%, rgba(233,223,200,.04), transparent 66%);
   box-shadow: 0 26px 70px var(--shadow);
   text-align:center;
@@ -102,68 +103,57 @@ body{
   pointer-events:none;
 }
 
-/* ========== LOGO IMAGE ========== */
+/* ====== LOGO (image) ====== */
 .mark{
   display:grid;
   place-items:center;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
+  position:relative;
 }
 
-/* Your generated logo image */
+/* subtle scanline overlay ONLY over logo area (helps “screen” feel) */
+.mark::after{
+  content:"";
+  position:absolute;
+  width: 280px;
+  height: 240px;
+  pointer-events:none;
+  opacity:.0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.06) 0px,
+    rgba(255,255,255,.06) 1px,
+    transparent 2px,
+    transparent 6px
+  );
+  mix-blend-mode: overlay;
+  border-radius: 18px;
+  animation: logoScan 8.2s linear infinite;
+}
+
 .logo{
-  width: 210px;
+  width: 240px;
   height: auto;
-  image-rendering: auto;
   opacity: .98;
   filter:
-    drop-shadow(0 0 14px rgba(183,154,82,0.18))
+    drop-shadow(0 0 14px rgba(183,154,82,0.16))
     drop-shadow(0 18px 26px rgba(0,0,0,0.70));
-  animation: logoBlink 7.6s steps(1,end) infinite;
+  transform: translateZ(0);
+  animation: logoFlicker 8.2s linear infinite;
 }
 
-/* “blink” pattern: mostly steady, tiny blackout */
-@keyframes logoBlink{
-  0%   { opacity: .98; }
-  90%  { opacity: .98; }
-  92%  { opacity: .20; }
-  93%  { opacity: .98; }
-  96%  { opacity: .98; }
-  97%  { opacity: .35; }
-  98%  { opacity: .98; }
-  100% { opacity: .98; }
-}
-
-/* ========== TYPE ========== */
-.title{
-  margin: 0;
-  font-family: "Cinzel", "Trajan Pro", "Times New Roman", serif;
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  font-size: clamp(46px, 5.2vw, 80px);
-  line-height: 1.02;
-  text-shadow: 0 10px 22px rgba(0,0,0,.55);
-}
-
-.tagline{
-  margin: 6px 0 2px;
-  font-family: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
-  letter-spacing: .18em;
-  font-size: clamp(13px, 1.5vw, 18px);
-  color: var(--ink-dim);
-  text-transform: uppercase;
-}
-
-/* rules */
+/* ====== RULES ====== */
 .rule, .subrule{
   height:2px;
-  width: min(760px, 90%);
-  margin: 22px auto;
+  width: min(760px, 92%);
+  margin: 0 auto;
   background: linear-gradient(90deg, transparent, var(--rule), transparent);
   border-radius: 999px;
 }
-.subrule{ margin: 18px auto 0; opacity:.85; }
+.rule{ margin-bottom: 26px; }
+.subrule{ margin-top: 18px; opacity:.85; }
 
-/* ========== STATUS ========== */
+/* ====== STATUS ====== */
 .statusPrimary{
   font-family: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
   letter-spacing: .24em;
@@ -173,11 +163,11 @@ body{
   animation: breathe 6s ease-in-out infinite;
 }
 
-/* animated dots after “INITIALIZING” */
+/* animated dots */
 .dots::after{
   content:"";
   display:inline-block;
-  width: 2.2em;           /* reserves space to prevent jitter */
+  width: 2.2em;
   margin-left: .35em;
   text-align:left;
   animation: dots 1.4s steps(4,end) infinite;
@@ -207,7 +197,7 @@ body{
 
 /* micro log */
 .microLog{
-  width: min(820px, 92%);
+  width: min(820px, 96%);
   margin: 18px auto 0;
   padding: 12px 14px;
   border: 1px solid rgba(233,223,200,.08);
@@ -250,7 +240,7 @@ body{
 .footerItem .label{ color: rgba(233,223,200,.52); }
 .footerItem .value{ color: rgba(233,223,200,.92); }
 
-/* ========== KEYFRAMES ========== */
+/* ====== ANIMATIONS ====== */
 @keyframes breathe{
   0%,100%{ opacity:.92; }
   50%{ opacity:1; }
@@ -270,9 +260,70 @@ body{
   to{ opacity:1; transform: translateY(0); }
 }
 
+/* “screen” flicker: mostly stable, brief dip + micro-jitter + tiny contrast shift */
+@keyframes logoFlicker{
+  0%, 86%, 100%{
+    opacity: .98;
+    transform: translateY(0);
+    filter:
+      drop-shadow(0 0 14px rgba(183,154,82,0.16))
+      drop-shadow(0 18px 26px rgba(0,0,0,0.70));
+  }
+
+  88%{
+    opacity: .72;
+    transform: translateY(0.6px);
+    filter:
+      drop-shadow(0 0 16px rgba(183,154,82,0.22))
+      drop-shadow(0 18px 26px rgba(0,0,0,0.72))
+      brightness(0.92) contrast(1.05);
+  }
+
+  88.6%{
+    opacity: .98;
+    transform: translateY(0);
+  }
+
+  91%{
+    opacity: .62;
+    transform: translateY(-0.6px);
+    filter:
+      drop-shadow(0 0 16px rgba(183,154,82,0.22))
+      drop-shadow(0 18px 26px rgba(0,0,0,0.72))
+      brightness(0.90) contrast(1.08);
+  }
+
+  91.4%{
+    opacity: .98;
+    transform: translateY(0);
+  }
+
+  93.5%{
+    opacity: .80;
+    transform: translateY(0.4px);
+    filter:
+      drop-shadow(0 0 16px rgba(183,154,82,0.20))
+      drop-shadow(0 18px 26px rgba(0,0,0,0.72))
+      brightness(0.94) contrast(1.04);
+  }
+
+  94%{
+    opacity: .98;
+    transform: translateY(0);
+  }
+}
+
+/* logo-only scanline pulse timed to flicker window */
+@keyframes logoScan{
+  0%, 86%, 100% { opacity: 0; transform: translateY(0); }
+  88% { opacity: .18; transform: translateY(1px); }
+  91% { opacity: .22; transform: translateY(-1px); }
+  94% { opacity: .10; transform: translateY(0); }
+}
+
 /* reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .frame::after, .frame::before, .statusPrimary, .logo, .dots::after{
+  .frame::after, .frame::before, .statusPrimary, .dots::after, .logo, .mark::after{
     animation: none !important;
   }
 }
