@@ -5,27 +5,62 @@ const messages = [
   "Verifying Data Integrity",
   "Indexing Strategic Assets",
   "Compiling After-Action Summaries",
+  "Resolving Territorial Claims",
   "Awaiting Command Input"
 ];
 
-const el = document.getElementById("statusSecondary");
-let i = 0;
+const microLines = [
+  "OPENING: DOSSIER /CRUSADE/CA-41",
+  "SCANNING: INDEX TABLES … OK",
+  "SORTING: BATTLE LOGS BY DATE",
+  "HASHING: OUTCOME RECORDS … OK",
+  "LINKING: TERRITORY CONTROL TABLE",
+  "CACHING: MAP LAYERS … OK"
+];
 
-// Timing (tweak to taste)
-const HOLD_MS = 6500;      // how long message stays
-const FADE_MS = 700;       // must match CSS transition
+const statusEl = document.getElementById("statusSecondary");
+const microEl = document.getElementById("microLog");
+const indexEl = document.getElementById("indexCount");
+
+let msgIndex = 0;
+let tick = 1;
+
+// timings (tweakable)
+const HOLD_MS = 6500;
+const FADE_MS = 700;
+
+// micro-log “activity” loop
+function updateMicroLog() {
+  const a = microLines[(tick + 0) % microLines.length];
+  const b = microLines[(tick + 1) % microLines.length];
+  const c = microLines[(tick + 2) % microLines.length];
+  microEl.textContent = `${a}\n${b}\n${c}`;
+}
+
+// index counter (slow, procedural)
+function updateIndex() {
+  const n = (tick % 9999).toString().padStart(4, "0");
+  indexEl.textContent = n;
+}
 
 function setMessage(next) {
-  // fade out
-  el.style.opacity = "0";
+  statusEl.style.opacity = "0";
   window.setTimeout(() => {
-    el.textContent = next;
-    // fade in
-    el.style.opacity = "1";
+    statusEl.textContent = next;
+    statusEl.style.opacity = "1";
   }, FADE_MS);
 }
 
+// init
+updateMicroLog();
+updateIndex();
+
+// rotate main messages
 window.setInterval(() => {
-  i = (i + 1) % messages.length;
-  setMessage(messages[i]);
+  msgIndex = (msgIndex + 1) % messages.length;
+  setMessage(messages[msgIndex]);
+
+  tick += 1;
+  updateMicroLog();
+  updateIndex();
 }, HOLD_MS);
