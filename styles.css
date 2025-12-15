@@ -1,12 +1,14 @@
 :root{
   --bg0:#060708;
   --bg1:#0b0d10;
-  --panel:#0a0c0f;
+
   --ink:#e9dfc8;                 /* bone */
   --ink-dim: rgba(233,223,200,.72);
   --ink-faint: rgba(233,223,200,.45);
+
   --brass:#b79a52;               /* muted gold */
   --rule: rgba(183,154,82,.55);
+
   --shadow: rgba(0,0,0,.62);
 }
 
@@ -100,26 +102,38 @@ body{
   pointer-events:none;
 }
 
-/* ========== BRAND ========== */
-.brand{ display:grid; place-items:center; gap: 10px; }
-
-.mark{ margin-bottom: 6px; }
-
-.emblem{
-  width: 164px;
-  height: 164px;
-  color: var(--ink);
-  opacity:.98;
-  filter: drop-shadow(0 14px 18px rgba(0,0,0,.62));
+/* ========== LOGO IMAGE ========== */
+.mark{
+  display:grid;
+  place-items:center;
+  margin-bottom: 12px;
 }
 
-/* balance layers */
-.emblem .swords{ opacity:.38; }
-.emblem .shrine{ opacity:.96; }
-.emblem .cross{ opacity:.84; }
-.emblem .skull{ opacity:.90; }
-.emblem .seal{ opacity:.22; }
+/* Your generated logo image */
+.logo{
+  width: 210px;
+  height: auto;
+  image-rendering: auto;
+  opacity: .98;
+  filter:
+    drop-shadow(0 0 14px rgba(183,154,82,0.18))
+    drop-shadow(0 18px 26px rgba(0,0,0,0.70));
+  animation: logoBlink 7.6s steps(1,end) infinite;
+}
 
+/* “blink” pattern: mostly steady, tiny blackout */
+@keyframes logoBlink{
+  0%   { opacity: .98; }
+  90%  { opacity: .98; }
+  92%  { opacity: .20; }
+  93%  { opacity: .98; }
+  96%  { opacity: .98; }
+  97%  { opacity: .35; }
+  98%  { opacity: .98; }
+  100% { opacity: .98; }
+}
+
+/* ========== TYPE ========== */
 .title{
   margin: 0;
   font-family: "Cinzel", "Trajan Pro", "Times New Roman", serif;
@@ -131,7 +145,7 @@ body{
 }
 
 .tagline{
-  margin: 0 0 2px;
+  margin: 6px 0 2px;
   font-family: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
   letter-spacing: .18em;
   font-size: clamp(13px, 1.5vw, 18px);
@@ -159,6 +173,23 @@ body{
   animation: breathe 6s ease-in-out infinite;
 }
 
+/* animated dots after “INITIALIZING” */
+.dots::after{
+  content:"";
+  display:inline-block;
+  width: 2.2em;           /* reserves space to prevent jitter */
+  margin-left: .35em;
+  text-align:left;
+  animation: dots 1.4s steps(4,end) infinite;
+}
+@keyframes dots{
+  0%   { content:""; }
+  25%  { content:"."; }
+  50%  { content:".."; }
+  75%  { content:"..."; }
+  100% { content:""; }
+}
+
 .statusSecondaryWrap{
   height: 34px;
   margin-top: 14px;
@@ -174,21 +205,25 @@ body{
   transition: opacity 700ms ease;
 }
 
-/* tiny “file index” micro-log */
+/* micro log */
 .microLog{
-  width: min(760px, 90%);
+  width: min(820px, 92%);
   margin: 18px auto 0;
-  font-family: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
-  letter-spacing: .10em;
-  font-size: 13px;
-  color: var(--ink-faint);
-  text-transform: uppercase;
+  padding: 12px 14px;
+  border: 1px solid rgba(233,223,200,.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,.18);
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12.5px;
   line-height: 1.35;
-  min-height: 46px;
-  opacity: .9;
+  color: rgba(233,223,200,.52);
+
+  max-height: 132px;
+  overflow: hidden;
 }
 
-/* ========== FOOTER ========== */
+/* footer */
 .footer{
   margin-top: 22px;
   display:flex;
@@ -235,7 +270,9 @@ body{
   to{ opacity:1; transform: translateY(0); }
 }
 
-/* OBS safety */
+/* reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .frame::after, .frame::before, .statusPrimary{ animation: none !important; }
+  .frame::after, .frame::before, .statusPrimary, .logo, .dots::after{
+    animation: none !important;
+  }
 }
