@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crusade Archive — Initializing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="frame" aria-label="Crusade Archive Initializing Screen">
+    <section class="center">
+      <div class="mark" aria-hidden="true">
+        <!-- Simple inline emblem (neutral, not faction-specific) -->
+        <svg class="emblem" viewBox="0 0 240 240" role="img" aria-label="Crusade Archive mark">
+          <path class="arch"
+            d="M60 200V95c0-44 28-72 60-72s60 28 60 72v105"
+            fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+          <path class="arch"
+            d="M60 200h120" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+          <path class="blade"
+            d="M42 118l44 44" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+          <path class="blade"
+            d="M198 118l-44 44" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+          <path class="cross"
+            d="M120 56v40M100 76h40"
+            fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+          <circle class="seal" cx="120" cy="142" r="34" fill="none" stroke="currentColor" stroke-width="8"/>
+          <path class="seal"
+            d="M104 150c6 10 26 10 32 0M108 134c3-3 7-3 10 0M122 134c3-3 7-3 10 0"
+            fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h1 class="title">CRUSADE ARCHIVE</h1>
+      <div class="rule"></div>
+
+      <div class="status">
+        <div class="statusPrimary">ARCHIVE INITIALIZING</div>
+
+        <div class="statusSecondaryWrap" aria-live="polite">
+          <div id="statusSecondary" class="statusSecondary">Loading Campaign Records</div>
+        </div>
+
+        <div class="subrule"></div>
+      </div>
+
+      <footer class="footer">
+        <div class="footerLine">
+          <span class="label">ARCHIVE REF</span>
+          <span class="value">CA-41-BAS</span>
+        </div>
+        <div class="footerLine">
+          <span class="label">DATA SEAL</span>
+          <span class="value">VERIFIED</span>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
