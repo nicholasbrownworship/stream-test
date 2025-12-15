@@ -6,52 +6,106 @@
   <title>Crusade Archive — Initializing</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
   <main class="frame" aria-label="Crusade Archive Initializing Screen">
-    <section class="center">
-      <div class="mark" aria-hidden="true">
-        <!-- Simple inline emblem (neutral, not faction-specific) -->
-        <svg class="emblem" viewBox="0 0 240 240" role="img" aria-label="Crusade Archive mark">
-          <path class="arch"
-            d="M60 200V95c0-44 28-72 60-72s60 28 60 72v105"
-            fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
-          <path class="arch"
-            d="M60 200h120" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
-          <path class="blade"
-            d="M42 118l44 44" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
-          <path class="blade"
-            d="M198 118l-44 44" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
-          <path class="cross"
-            d="M120 56v40M100 76h40"
-            fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
-          <circle class="seal" cx="120" cy="142" r="34" fill="none" stroke="currentColor" stroke-width="8"/>
-          <path class="seal"
-            d="M104 150c6 10 26 10 32 0M108 134c3-3 7-3 10 0M122 134c3-3 7-3 10 0"
-            fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-        </svg>
-      </div>
+    <section class="panel">
+      <header class="brand">
+        <div class="mark">
+          <!-- Crusade Archive Emblem (inline SVG so it stays crisp + recolorable) -->
+          <svg class="emblem" viewBox="0 0 240 240" role="img" aria-label="Crusade Archive Emblem">
+            <!-- Crossed swords (behind) -->
+            <g class="swords" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Left sword -->
+              <path d="M52 182 L118 116" stroke-width="12"/>
+              <path d="M118 116 L142 92" stroke-width="10"/>
+              <path d="M40 194 L66 168" stroke-width="16"/>
+              <path d="M36 198 L54 180" stroke-width="16"/>
 
-      <h1 class="title">CRUSADE ARCHIVE</h1>
+              <!-- Right sword -->
+              <path d="M188 182 L122 116" stroke-width="12"/>
+              <path d="M122 116 L98 92" stroke-width="10"/>
+              <path d="M200 194 L174 168" stroke-width="16"/>
+              <path d="M204 198 L186 180" stroke-width="16"/>
+            </g>
+
+            <!-- Shrine / arch -->
+            <g class="shrine" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Outer arch -->
+              <path d="M70 204 V110
+                       C70 74 92 48 120 48
+                       C148 48 170 74 170 110
+                       V204" stroke-width="12"/>
+              <!-- Base -->
+              <path d="M66 204 H174" stroke-width="12"/>
+
+              <!-- Inner arch -->
+              <path d="M90 204 V116
+                       C90 90 104 72 120 72
+                       C136 72 150 90 150 116
+                       V204" stroke-width="8" opacity="0.75"/>
+            </g>
+
+            <!-- Cross -->
+            <g class="cross" fill="none" stroke="currentColor" stroke-linecap="round">
+              <path d="M120 78 V112" stroke-width="10"/>
+              <path d="M102 95 H138" stroke-width="10"/>
+            </g>
+
+            <!-- Skull (bold + grim) -->
+            <g class="skull" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Cranium -->
+              <path d="M96 150
+                       C96 128 108 114 120 114
+                       C132 114 144 128 144 150
+                       C144 168 132 182 120 182
+                       C108 182 96 168 96 150 Z" stroke-width="12"/>
+              <!-- Jaw -->
+              <path d="M108 182
+                       C110 196 114 202 120 202
+                       C126 202 130 196 132 182" stroke-width="12"/>
+              <!-- Eye sockets -->
+              <path d="M108 148 C112 142 118 140 120 140" stroke-width="9" opacity="0.65"/>
+              <path d="M132 148 C128 142 122 140 120 140" stroke-width="9" opacity="0.65"/>
+              <!-- Nasal -->
+              <path d="M120 152 V160" stroke-width="9" opacity="0.55"/>
+            </g>
+
+            <!-- Seal ring for weight -->
+            <circle class="seal" cx="120" cy="156" r="56" fill="none" stroke="currentColor" stroke-width="6" opacity="0.22"/>
+          </svg>
+        </div>
+
+        <h1 class="title">CRUSADE ARCHIVE</h1>
+        <p class="tagline">RECORDED CAMPAIGNS OF ENDLESS WAR</p>
+      </header>
+
       <div class="rule"></div>
 
-      <div class="status">
+      <section class="status">
         <div class="statusPrimary">ARCHIVE INITIALIZING</div>
 
         <div class="statusSecondaryWrap" aria-live="polite">
           <div id="statusSecondary" class="statusSecondary">Loading Campaign Records</div>
         </div>
 
-        <div class="subrule"></div>
-      </div>
+        <div class="microLog" id="microLog" aria-hidden="true"></div>
+      </section>
+
+      <div class="subrule"></div>
 
       <footer class="footer">
-        <div class="footerLine">
+        <div class="footerItem">
           <span class="label">ARCHIVE REF</span>
-          <span class="value">CA-41-BAS</span>
+          <span class="value" id="archiveRef">CA-41-BAS</span>
         </div>
-        <div class="footerLine">
+        <div class="footerItem">
           <span class="label">DATA SEAL</span>
           <span class="value">VERIFIED</span>
+        </div>
+        <div class="footerItem">
+          <span class="label">INDEX</span>
+          <span class="value" id="indexCount">0001</span>
         </div>
       </footer>
     </section>
