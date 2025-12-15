@@ -1,4 +1,6 @@
-// Rotating “system messages” (fade only; no typing)
+// script.js
+// Randomized micro-log stamps + randomized INDEX (no counting up from 1)
+
 const messages = [
   "Loading Campaign Records",
   "Cross-Referencing Battle Logs",
@@ -9,7 +11,6 @@ const messages = [
   "Awaiting Command Input"
 ];
 
-// Micro-log lines that feel like file operations (keeps it “alive”)
 const microPool = [
   "OPENING: DOSSIER /CRUSADE/CA-41",
   "SCANNING: INDEX TABLES … OK",
@@ -33,8 +34,29 @@ const indexEl  = document.getElementById("indexCount");
 const HOLD_MS = 6500;
 const FADE_MS = 700;
 
-let msgIndex = 0;
-let counter = 1;
+// Random stamp generator (avoids repeats for a bit to feel more "system-y")
+const usedStamps = new Set();
+function randStamp4() {
+  let s;
+  do {
+    s = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+  } while (usedStamps.has(s) && usedStamps.size < 9000);
+
+  usedStamps.add(s);
+
+  // Keep memory bounded (still reduces immediate repeats)
+  if (usedStamps.size > 200) usedStamps.clear();
+
+  return s;
+}
+
+function randIndex4() {
+  return String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+}
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 // Micro-log: maintain a rolling window
 const logLines = [];
@@ -47,9 +69,7 @@ function pushLogLine(line) {
 }
 
 function nextMicroLine() {
-  const pick = microPool[Math.floor(Math.random() * microPool.length)];
-  const stamp = String(counter).padStart(4, "0");
-  return `${stamp} | ${pick}`;
+  return `${randStamp4()} | ${pick(microPool)}`;
 }
 
 function setMessage(next) {
@@ -60,24 +80,21 @@ function setMessage(next) {
   }, FADE_MS);
 }
 
-// Prime log
-for (let i = 0; i < MAX_LINES; i++) {
-  pushLogLine(nextMicroLine());
-  counter++;
-}
-
-indexEl.textContent = "0001";
+// Init
+for (let i = 0; i < MAX_LINES; i++) pushLogLine(nextMicroLine());
+indexEl.textContent = randIndex4();
 
 // Loop
+let msgIndex = 0;
+
 setInterval(() => {
   msgIndex = (msgIndex + 1) % messages.length;
   setMessage(messages[msgIndex]);
 
   // Add 1–2 new log lines per cycle to feel “busy”
-  pushLogLine(nextMicroLine()); counter++;
-  if (Math.random() > 0.55) { pushLogLine(nextMicroLine()); counter++; }
+  pushLogLine(nextMicroLine());
+  if (Math.random() > 0.55) pushLogLine(nextMicroLine());
 
-  // Update index counter
-  const idx = (parseInt(indexEl.textContent, 10) + 1) % 9999;
-  indexEl.textContent = String(idx || 1).padStart(4, "0");
+  // Random index (simulates random access / file pointer jumps)
+  indexEl.textContent = randIndex4();
 }, HOLD_MS);
